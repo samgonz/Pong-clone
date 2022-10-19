@@ -7,6 +7,7 @@ import dotted_line
 screen = Screen()
 screen.bgcolor("black")
 screen.screensize(400,400)
+screen.title('Pong')
 
 player_one_paddle = Paddle((-380, 0))
 player_two_paddle = Paddle((380, 0))
