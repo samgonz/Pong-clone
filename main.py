@@ -1,7 +1,8 @@
-from turtle import Screen
+from turtle import Screen, Turtle
 from ball import Ball
 from scoreboard import Scoreboard
 from paddle import Paddle
+import dotted_line
 
 screen = Screen()
 screen.bgcolor("black")
@@ -12,6 +13,9 @@ player_two_paddle = Paddle((380, 0))
 ball = Ball()
 scoreboard = Scoreboard()
 
+# Creates the center line for the scoreboard
+dotted_line.Dashed_Line()
+    
 # Creates a listener to listen for keyboard events
 screen.listen()
 screen.onkey(player_one_paddle.up,"w")
