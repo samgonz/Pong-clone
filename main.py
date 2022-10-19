@@ -1,6 +1,8 @@
 import time
 from turtle import Turtle, Screen
+from paddle import Paddle
 from ball import Ball
+from scoreboard import Scoreboard
 
 from paddle import Paddle
 
@@ -8,12 +10,10 @@ screen = Screen()
 screen.bgcolor("black")
 screen.screensize(400,400)
 
-player_one_paddle = Paddle()
-player_two_paddle = Paddle()
+player_one_paddle = Paddle((-380, 0))
+player_two_paddle = Paddle((380, 0))
 ball = Ball()
-
-player_one_paddle.player('player_one')
-player_two_paddle.player('player_two')
+scoreboard = Scoreboard()
 
 # Creates a listener to listen for keyboard events
 screen.listen()
@@ -26,27 +26,25 @@ game_is_on = True
 # Creates a loop that updates the screen every .1 second.
 while game_is_on:
     screen.update()
-    time.sleep(.1)
     ball.move()
-    
-    if ball.distance(player_one_paddle) < 5 or ball.distance(player_two_paddle) < 5:
-        ball_heading = ball.heading()
-        
-        if ball_heading > 180:
-            new_heading = int(ball_heading) + 180
-            print(new_heading)
-            if new_heading > 360:
-                new_heading -= 360
-            print(new_heading)
-            ball.move(new_heading)    
-        else:
-            new_heading = int(ball_heading) + 180
-            print(new_heading)
-            if new_heading < 0:
-                new_heading += 360   
-            print(new_heading)
-            ball.move(new_heading)   
 
-        print(ball_heading)
+    #Detect collision with wall
+    if ball.ycor() > 380 or ball.ycor() < -380:
+        ball.bounce_y()
+
+    #Detect collision with paddle
+    if ball.distance(player_two_paddle) < 50 and ball.xcor() > 350 or ball.distance(player_one_paddle) < 50 and ball.xcor() < -350:
+        ball.bounce_x()
+
+    #Detect R paddle misses
+    if ball.xcor() > 380:
+        ball.reset_position()
+        scoreboard.l_point()
+
+    #Detect L paddle misses:
+    if ball.xcor() < -380:
+        ball.reset_position()
+        scoreboard.r_point()
+        
 
 screen.exitonclick()
